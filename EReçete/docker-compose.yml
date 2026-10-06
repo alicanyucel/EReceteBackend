@@ -1,0 +1,42 @@
+services:
+  erecete.api:
+    container_name: erecete-api
+    build:
+      context: .
+      dockerfile: EReçete.WebAPI/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__SqlServer=Data Source=erecete.db;Initial Catalog=EReçeteDb;User Id=sa;Password=ERecete_Strong!Pass123;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True
+    depends_on:
+      erecete.db:
+        condition: service_healthy
+    networks:
+      - erecete-network
+
+  erecete.db:
+    container_name: erecete-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=ERecete_Strong!Pass123
+    ports:
+      - "1433:1433"
+    volumes:
+      - erecete-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "ERecete_Strong!Pass123" -C -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - erecete-network
+
+volumes:
+  erecete-data:
+
+networks:
+  erecete-network:
+    driver: bridge

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="EReçete/EReçete.Application/EReçete.Application.csproj" />
+  <Project Path="EReçete/EReçete.Domain/EReçete.Domain.csproj" />
+  <Project Path="EReçete/EReçete.Infrastructure/EReçete.Infrastructure.csproj" />
+  <Project Path="EReçete/EReçete.WebAPI/EReçete.WebAPI.csproj" />
+</Solution>
